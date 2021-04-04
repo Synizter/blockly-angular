@@ -1,0 +1,26 @@
+'<xml id="toolbox" style="display: none">' +
+'    <category name="Logic" color="210">' +
+'        <Block type="controls_if"></Block>' +
+'        <Block type="logic_compare"></Block>' +
+'        <Block type="logic_operation"></Block>' +
+'        <Block type="logic_negate"></Block>' +
+'        <Block type="logic_boolean"></Block>' +
+'    </category>' +
+'' +
+'    <category name="Loops" color="210">' +
+'        <Block type="controls_repeat_ext"></Block>' +
+'        <Block type="controls_whileUntil"></Block>' +
+'    </category>' +
+'' +
+'    <category name="Text" color="230">' +
+'        <Block type="text"></Block>' +
+'        <Block type="text_length"></Block>' +
+'        <Block type="text_print"></Block>' +
+'    </category>' +
+'' +
+'    <category name="Math" color="250">' +
+'        <Block type="math_number"></Block>' +
+'        <Block type="math_arithmetic"></Block>' +
+'        <Block type="math_single"></Block>' +
+'    </category>' +
+'</xml>'
