@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { 
+  NgxBlocklyComponent,
   CustomBlock, 
   NgxBlocklyConfig, 
   NgxBlocklyGeneratorConfig, 
@@ -15,22 +16,25 @@ import {
   Category } from 'ngx-blockly';
 
 //CustomBlock import
-import { TestBlock } from '../customblock/testBlock.block'
 import {
   SkillCallBlock, 
   SkillGoToBlock, 
   SkillSpeakBlock } from '../customblock/temi.skill.block'
+
+
+declare var Blockly: any;
+
 
 @Component({
   selector: 'app-blocklyworkspace',
   templateUrl: './blocklyworkspace.component.html',
   styleUrls: ['./blocklyworkspace.component.css']
 })
-export class BlocklyworkspaceComponent {
+export class BlocklyworkspaceComponent implements AfterViewInit {
 
+  @ViewChild(NgxBlocklyComponent) blocklyComponent: NgxBlocklyComponent; //blockly workspace
   public customBlocks: CustomBlock[] = [
     //note that this string shoud be resemble block name in XML
-    // new TestBlock('test', null, null)
     new SkillCallBlock('temi_skill_call', null, null),
     new SkillGoToBlock('temi_skill_goto',null, null),
     new SkillSpeakBlock('temi_skill_speak',null, null)
@@ -49,11 +53,15 @@ export class BlocklyworkspaceComponent {
     // lua: true,
     // php: true,
     // python: true,
-    // xml: true
+    xml: true
   };
+
+  
+
   //Callback function
   onCode(code: String) {
     console.log(code);
+    console.log(this.blocklyComponent.toXml())
     this.generatedCode = code;
   }
 
@@ -72,6 +80,12 @@ export class BlocklyworkspaceComponent {
         new Category('Temi Skill', '#FF21FF',this.customBlocks, null)
     ];
     this.config.toolbox = ngxToolboxBuilder.build();
+    
+  }
+  ngAfterViewInit(): void {
+    this.blocklyComponent.workspace.createVariable('test', null, null);
+    this.blocklyComponent.workspace.createVariable('test1', null, null);
+    this.blocklyComponent.workspace.createVariable('test2', null, null);
   }
   
 
