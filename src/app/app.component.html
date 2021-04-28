@@ -1,2 +1,19 @@
-<h1>SIIT Blockly Editor System</h1>
+<!-- <h1>SIIT Blockly Editor System</h1>
 <app-blocklyworkspace></app-blocklyworkspace>
+<app-editor></app-editor> -->
+
+<div>
+    <!-- header -->
+    <nav class="navbar navbar-light bg-light ">
+        <div class="container text-center p-2 ">
+            <span class="mx-auto text-bold">Blockly CMS Test</span>
+        </div>
+    </nav>
+</div>
+
+<app-editor 
+ (codeEmittor)="receiveCodeEvent($event)"
+ (displayBlocklyWorkspace)="DisplayBlocklyWorkspace($event)">
+</app-editor>
+
+<app-blocklyworkspace *ngIf="displayWorkspace" [jsonContent]="content"></app-blocklyworkspace>

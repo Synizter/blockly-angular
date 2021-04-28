@@ -7,17 +7,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MaterialModule } from './material/material.module';
 import { BlocklyworkspaceComponent } from './blocklyworkspace/blocklyworkspace.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { ConsoleComponent } from './console/console.component';
 import { EditorComponent } from './editor/editor.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BlocklyworkspaceComponent,
-    NavbarComponent,
-    ConsoleComponent,
-    EditorComponent
+    EditorComponent,
   ],
   imports: [
     BrowserModule,

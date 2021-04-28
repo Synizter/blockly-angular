@@ -1,0 +1,15 @@
+{
+    "vars" : [
+        "isActive",
+        "temiStatus",
+        "no_interact"
+    ],
+    "xml-workspace" : "<xml xmlns=\"https://developers.google.com/blockly/xml\"><variables><variable id=\"~383tPBhi|Mamk65z?L!\">var1</variable></variables><block type=\"text_print\" id=\"#p[-]1||O^?%v%nW5?/X\" x=\"29\" y=\"65\"><value name=\"TEXT\"><block type=\"text_join\" id=\"k*KK7t?;:48v6ID*RBpu\"><mutation items=\"1\"></mutation><value name=\"ADD0\"><block type=\"variables_get\" id=\"[jd|9DC6jX1$9`t6[`.*\"><field name=\"VAR\" id=\"~383tPBhi|Mamk65z?L!\">var1</field></block></value></block></value></block></xml>"
+},
+
+{
+    "vars" : [
+        "newDate"
+    ],
+    "xml-workspace" : "<xml xmlns=\"https://developers.google.com/blockly/xml\"></xml>"
+}

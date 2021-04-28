@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { variable } from '@angular/compiler/src/output/output_ast';
+import { AfterViewInit, Component, OnInit, ViewChild, Input } from '@angular/core';
 import { 
   NgxBlocklyComponent,
   CustomBlock, 
@@ -33,6 +34,8 @@ declare var Blockly: any;
 export class BlocklyworkspaceComponent implements AfterViewInit {
 
   @ViewChild(NgxBlocklyComponent) blocklyComponent: NgxBlocklyComponent; //blockly workspace
+  @Input() jsonContent: JSON;
+  
   public customBlocks: CustomBlock[] = [
     //note that this string shoud be resemble block name in XML
     new SkillCallBlock('temi_skill_call', null, null),
@@ -56,12 +59,10 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     xml: true
   };
 
-  
-
   //Callback function
   onCode(code: String) {
-    console.log(code);
-    console.log(this.blocklyComponent.toXml())
+    // console.log(code);
+    // console.log(this.blocklyComponent.toXml())
     this.generatedCode = code;
   }
 
@@ -83,10 +84,29 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     
   }
   ngAfterViewInit(): void {
-    this.blocklyComponent.workspace.createVariable('test', null, null);
-    this.blocklyComponent.workspace.createVariable('test1', null, null);
-    this.blocklyComponent.workspace.createVariable('test2', null, null);
+    //Initialize workspace with block + create variable on code
+    this.blocklyComponent.fromXml(this.jsonContent['xml-workspace']);
+    //Add predefined varialbe
+    for (var i = 0; i < this.jsonContent['vars'].length; ++i)
+    {
+      this.blocklyComponent.workspace.createVariable(this.jsonContent['vars'][i]);
+    }
   }
-  
 
+  public generateWorkspace() {
+    //Push newly create variable to jsonContent
+    this.jsonContent['vars'] = [] //remove everythings
+    let varList:Blockly.VariableModel[] = this.blocklyComponent.workspace.getAllVariables();
+    for(var i = 0; i < varList.length; ++i) {
+      this.jsonContent['vars'].push(varList[i].name);
+    }
+    //repace xml workspace
+    let xmlworkspace: string = this.blocklyComponent.toXml();
+    xmlworkspace.replace('"', '\\"')
+    // console.log(xmlworkspace);
+    this.jsonContent['xml-workspace'] = xmlworkspace;
+    console.log(this.jsonContent)  
+  }
 }
+
+//TEST {"vars":["var1", "var2", "var3"]}
