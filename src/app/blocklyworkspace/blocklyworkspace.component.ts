@@ -101,6 +101,7 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     this.jsonContent['vars'] = [] //remove everythings
     let varList:any = this.blocklyComponent.workspace.getAllVariables();
     for(var i = 0; i < varList.length; ++i) {
+      console.log()
       this.jsonContent['vars'].push(varList[i].name);
     }
     //repace xml workspace
@@ -113,6 +114,11 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     let codeworkspace: string = this.generatedCode;
     codeworkspace.replace('"', '\\"')
     this.jsonContent['code-workspace'] = codeworkspace;
+
+
+    //TEST: Hardcode - by pass method ref eg. b.a => b_a by blockly
+    //replace varaible name
+
     this.exportJsonFile();
   }
 
