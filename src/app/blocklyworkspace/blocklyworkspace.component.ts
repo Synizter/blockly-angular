@@ -64,8 +64,7 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
 
   //Callback function
   onCode(code: string) {
-    // console.log(code);
-    // console.log(this.blocklyComponent.toXml())
+    console.log(code)
     this.generatedCode = code;
   }
 
@@ -107,7 +106,6 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     //repace xml workspace
     let xmlworkspace: string = this.blocklyComponent.toXml();
     xmlworkspace.replace('"', '\\"')
-    // console.log(xmlworkspace);
     this.jsonContent['xml-workspace'] = xmlworkspace; 
 
     //add javascript code
