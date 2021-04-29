@@ -44,7 +44,7 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     new SkillGoToBlock('temi_skill_goto',null, null),
     new SkillSpeakBlock('temi_skill_speak',null, null)
   ];
-  private generatedCode:String;
+  private generatedCode:string;
   public downloadJsonHref: SafeUrl;
   public config: NgxBlocklyConfig = {
     scrollbars: true,
@@ -63,7 +63,7 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
   };
 
   //Callback function
-  onCode(code: String) {
+  onCode(code: string) {
     // console.log(code);
     // console.log(this.blocklyComponent.toXml())
     this.generatedCode = code;
@@ -107,9 +107,12 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     let xmlworkspace: string = this.blocklyComponent.toXml();
     xmlworkspace.replace('"', '\\"')
     // console.log(xmlworkspace);
-    this.jsonContent['xml-workspace'] = xmlworkspace;
-    console.log(this.jsonContent)  
+    this.jsonContent['xml-workspace'] = xmlworkspace; 
 
+    //add javascript code
+    let codeworkspace: string = this.generatedCode;
+    codeworkspace.replace('"', '\\"')
+    this.jsonContent['code-workspace'] = codeworkspace;
     this.exportJsonFile();
   }
 
