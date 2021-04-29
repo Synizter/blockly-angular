@@ -83,6 +83,7 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
         new Category('Temi Skill', '#FF21FF',this.customBlocks, null)
     ];
     this.config.toolbox = ngxToolboxBuilder.build();
+    console.log('if you not see this in console, you are fucked');
     
   }
   ngAfterViewInit(): void {
