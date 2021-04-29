@@ -1,5 +1,13 @@
 <!-- <p>blocklyworkspace works!</p> -->
-<div><button (click)="generateWorkspace()">Generate Workspace JSON</button></div>
+<div>
+    <button (click)="generateWorkspace()">
+        Generate Workspace JSON
+    </button>
+    <a [href]="downloadJsonHref" target="_blank" class="btn btn-border" download="workspace.json">
+        Export JSON
+    </a>
+
+</div>
 
 <ngx-blockly 
 [config]="config" 

@@ -1,5 +1,7 @@
+import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { variable } from '@angular/compiler/src/output/output_ast';
 import { AfterViewInit, Component, OnInit, ViewChild, Input } from '@angular/core';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { 
   NgxBlocklyComponent,
   CustomBlock, 
@@ -43,6 +45,7 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     new SkillSpeakBlock('temi_skill_speak',null, null)
   ];
   private generatedCode:String;
+  public downloadJsonHref: SafeUrl;
   public config: NgxBlocklyConfig = {
     scrollbars: true,
     trashcan: true,
@@ -70,7 +73,7 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     return this.generatedCode;
   }
   
-  constructor(ngxToolboxBuilder: NgxToolboxBuilderService) {
+  constructor(ngxToolboxBuilder: NgxToolboxBuilderService, private sanitizer: DomSanitizer) {
     ngxToolboxBuilder.nodes = [
         LOGIC_CATEGORY,
         LOOP_CATEGORY,
@@ -96,7 +99,7 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
   public generateWorkspace() {
     //Push newly create variable to jsonContent
     this.jsonContent['vars'] = [] //remove everythings
-    let varList:Blockly.VariableModel[] = this.blocklyComponent.workspace.getAllVariables();
+    let varList:any = this.blocklyComponent.workspace.getAllVariables();
     for(var i = 0; i < varList.length; ++i) {
       this.jsonContent['vars'].push(varList[i].name);
     }
@@ -106,6 +109,23 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     // console.log(xmlworkspace);
     this.jsonContent['xml-workspace'] = xmlworkspace;
     console.log(this.jsonContent)  
+
+    this.exportJsonFile();
+  }
+
+  public exportJsonFile() {
+    try {
+      let exportJson = JSON.stringify(this.jsonContent);
+      console.log(exportJson);
+      let blob = new Blob([exportJson], {type:'text/json'});
+      let url = window.webkitURL.createObjectURL(blob);
+      let uri: SafeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      // var uri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8, " + encodeURIComponent(exportJson));
+      this.downloadJsonHref = uri;
+    }catch(e){
+      alert(e);
+    }
+
   }
 }
 
