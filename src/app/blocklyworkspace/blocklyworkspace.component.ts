@@ -1,5 +1,7 @@
+import { getLocaleFirstDayOfWeek } from '@angular/common';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { variable } from '@angular/compiler/src/output/output_ast';
+import { stringify } from '@angular/compiler/src/util';
 import { AfterViewInit, Component, OnInit, ViewChild, Input } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { 
@@ -17,7 +19,6 @@ import {
   LISTS_CATEGORY,
   VARIABLES_CATEGORY,
   Category } from 'ngx-blockly';
-import { EMLINK, SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'node:constants';
 
 //CustomBlock import
 import {
@@ -95,26 +96,40 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     }
   }
 
-  private replaceElement(qstr:string, tstr:string, out:string) {
+  private replaceAllOccuren(qstr:string, tstr:string, out:string) {
       var re = new RegExp(qstr, 'gi');
-      console.log(`regrex ${re}, repalce ${tstr}`)
       return out.replace(re, tstr);
   }
+
   public generateWorkspace() {
-    var outputJson:JSON = this.jsonContent;
+    let outputJson:JSON = this.jsonContent;
     //1 pack xml workspace file
-    outputJson['xml-workspace'] = this.blocklyComponent.toXml();
+    outputJson['xml-workspace'] = this.blocklyComponent.toXml().replace(/\"/g, "\\\"");
+    
     //2 pack variable to internal (vars-int : created on blockly) and external (vars-ext : create by external workspace)
     let allWorkspaceVariable:any = this.blocklyComponent.workspace.getAllVariables();
     allWorkspaceVariable.forEach(element => {
-       outputJson['vars-ext'].indexOf(element.name) === -1 ? outputJson['vars-int'].push(element.name) : null
+      (outputJson['vars-ext'].indexOf(element.name) === -1 && outputJson['vars-int'].indexOf(element.name) === -1) ? (outputJson['vars-int'].push(element.name)): (null);
     });
-    //3 remove external variable declaration from generated code
+    
+    //3 remove all variable declaration from generated code and add only internal variable declaration
     let codeworkspace: string = this.generatedCode;
-    for(var i = 0; i < outputJson['vars-ext'].length; ++i) {
-      this.replaceElement(outputJson['vars-ext'][i], '', codeworkspace)
+    codeworkspace = codeworkspace.substring(codeworkspace.indexOf('\n\n') ,codeworkspace.length - 1)
+    let intVarDeclareStr = new String()
+    for(var i in outputJson['vars-int']) {
+      intVarDeclareStr += 'var ' + outputJson['vars-int'][i] + '\n'
     }
-    console.log(codeworkspace);
+    //console.log(intVarDeclareStr + codeworkspace)
+
+    //4. replace external variable object reference converted by blockly
+    allWorkspaceVariable.forEach(element => {
+      (outputJson['vars-ext'].indexOf(element.name) !== -1) ? (codeworkspace = this.replaceAllOccuren(element.name, element.name, codeworkspace)) : (null);
+    });
+    // console.log(intVarDeclareStr+codeworkspace);
+    outputJson['code-workspace'] = intVarDeclareStr + codeworkspace;
+    
+
+
 
     // let varList:any = this.blocklyComponent.workspace.getAllVariables();
     // for(var i = 0; i < varList.length; ++i) {
@@ -137,7 +152,7 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
 
     // //TEST: Hardcode - by pass method ref eg. b.a => b_a by blockly
     //replace varaible name
-
+    intVarDeclareStr = undefined;
     this.exportJsonFile();
   }
 

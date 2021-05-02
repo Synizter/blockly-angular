@@ -5,5 +5,11 @@ run webapp locally using `npm start` or `ng serve`
 If there's no error, webapp will be access on localhost:4200
 
 ## TODO
-[ ] remove variable declaration from generated code
-[ ] workaround . and _ tranform by blockly (regrex)
+- [x] remove variable declaration from generated code
+- [x] workaround . and _ tranform by blockly (regrex)
+- [x] arrange variable type to external (vars-ext) and internal variable (vars-int). vars-int specify variable which will be used only in blockly workspace.
+- [ ] remove declaration of variable of vars-ext from output code
+
+## Limitation
+- DO NOT use _ in varaible, use camel case instead
+- 

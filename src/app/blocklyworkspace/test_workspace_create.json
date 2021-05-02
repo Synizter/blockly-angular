@@ -1,3 +1,4 @@
+//Despricated
 {
     "vars" : [
         "isActive",
@@ -12,4 +13,26 @@
         "newDate"
     ],
     "xml-workspace" : "<xml xmlns=\"https://developers.google.com/blockly/xml\"></xml>"
+}
+
+{"vars":["newDate","test","test.name","b.a"],"xml-workspace":"<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables>\n    <variable id=\"s%c7g!zM[JY_^vxjSYVU\">b.a</variable>\n    <variable id=\"?/GQ}pbd|`Ag/![Nhd]{\">test.name</variable>\n  </variables>\n  <block type=\"variables_set\" id=\"?{q$Y1w3htVl+iSeueI9\" x=\"137\" y=\"70\">\n    <field name=\"VAR\" id=\"s%c7g!zM[JY_^vxjSYVU\">b.a</field>\n    <value name=\"VALUE\">\n      <block type=\"variables_get\" id=\"gbCm:M?4zF@*.R`80p_M\">\n        <field name=\"VAR\" id=\"?/GQ}pbd|`Ag/![Nhd]{\">test.name</field>\n      </block>\n    </value>\n  </block>\n</xml>","code-workspace":"var b_a, test_name;\n\n\nb_a = test_name;\n"}
+
+
+//INPUT
+{
+    "vars-ext" : [
+        "_obj.name",
+        "_obj.value",
+        "TemiProperty.currentDispalyText",
+        "robotTemi.curr_position"
+    ],
+    "vars-int" : [],
+    "xml-workspace" : "<xml xmlns=\"https://developers.google.com/blockly/xml\"><variables><variable id=\"~383tPBhi|Mamk65z?L!\">var1</variable></variables><block type=\"text_print\" id=\"#p[-]1||O^?%v%nW5?/X\" x=\"29\" y=\"65\"><value name=\"TEXT\"><block type=\"text_join\" id=\"k*KK7t?;:48v6ID*RBpu\"><mutation items=\"1\"></mutation><value name=\"ADD0\"><block type=\"variables_get\" id=\"[jd|9DC6jX1$9`t6[`.*\"><field name=\"VAR\" id=\"~383tPBhi|Mamk65z?L!\">var1</field></block></value></block></value></block></xml>"
+}
+//OUTPUT 
+{
+    "vars-ext" : [],
+    "var-int" : [],
+    "xml-workspace" : <string>,
+    "code-workspace" :<string>
 }
