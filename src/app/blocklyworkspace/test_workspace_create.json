@@ -36,3 +36,15 @@
     "xml-workspace" : <string>,
     "code-workspace" :<string>
 }
+
+{
+    "vars-ext" : [
+        "_obj.name",
+        "_obj.value",
+        "TemiProperty.currentDispalyText",
+        "robotTemi.curr_position"
+    ],
+    "vars-int" : [],
+    "xml-workspace" : "<xml xmlns=\"https://developers.google.com/blockly/xml\"><variables><variable id=\"pRq@i;#.7WOcJ_nkwLH;\">robotTemi.curr_position</variable><variable id=\"~383tPBhi|Mamk65z?L!\">var1</variable><variable id=\"PV3d.gBL@+q0u[.c@yT2\">ddfssdaDAS</variable></variables><block type=\"text_print\" id=\"#p[-]1||O^?%v%nW5?/X\" x=\"48\" y=\"121\"><value name=\"TEXT\"><block type=\"text_join\" id=\"k*KK7t?;:48v6ID*RBpu\"><mutation items=\"1\"></mutation><value name=\"ADD0\"><block type=\"variables_get\" id=\"[jd|9DC6jX1$9`t6[`.*\"><field name=\"VAR\" id=\"~383tPBhi|Mamk65z?L!\">var1</field></block></value></block></value><next><block type=\"variables_set\" id=\"F8X`DHp_l*N%=,coJsvS\"><field name=\"VAR\" id=\"pRq@i;#.7WOcJ_nkwLH;\">robotTemi.curr_position</field><value name=\"VALUE\"><block type=\"variables_get\" id=\"ko_-:S?~XHk]zRH9qza+\"><field name=\"VAR\" id=\"PV3d.gBL@+q0u[.c@yT2\">ddfssdaDAS</field></block></value></block></next></block></xml>"
+}
+

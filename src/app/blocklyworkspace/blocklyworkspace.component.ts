@@ -2,7 +2,7 @@ import { getLocaleFirstDayOfWeek } from '@angular/common';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { variable } from '@angular/compiler/src/output/output_ast';
 import { stringify } from '@angular/compiler/src/util';
-import { AfterViewInit, Component, OnInit, ViewChild, Input } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, Input, AfterViewChecked } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { 
   NgxBlocklyComponent,
@@ -91,12 +91,10 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     //Initialize workspace with block + create variable on code
     this.blocklyComponent.fromXml(this.jsonContent['xml-workspace']);
     //Add predefined external varialbe
-    // for (var i = 0; i < this.jsonContent['vars-ext'].length; ++i) {
-    //   this.blocklyComponent.workspace.createVariable(this.jsonContent['vars-ext'][i]);
-    // }
-    for (var i  of this.jsonContent['vars-ext']) {
+    for (var i = 0; i < this.jsonContent['vars-ext'].length; ++i) {
       this.blocklyComponent.workspace.createVariable(this.jsonContent['vars-ext'][i]);
     }
+
   }
 
   private replaceAllOccuren(qstr:string, tstr:string, out:string) {
@@ -107,7 +105,7 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
   public generateWorkspace() {
     let outputJson:JSON = this.jsonContent;
     //1 pack xml workspace file
-    outputJson['xml-workspace'] = this.blocklyComponent.toXml().replace(/\"/g, "\\\"");
+    outputJson['xml-workspace'] = this.blocklyComponent.toXml()
     
     //2 pack variable to internal (vars-int : created on blockly) and external (vars-ext : create by external workspace)
     let allWorkspaceVariable:any = this.blocklyComponent.workspace.getAllVariables();
