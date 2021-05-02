@@ -377,11 +377,10 @@ class BlocklyworkspaceComponent {
             new ngx_blockly__WEBPACK_IMPORTED_MODULE_1__["Category"]('Temi Skill', '#FF21FF', this.customBlocks, null)
         ];
         this.config.toolbox = ngxToolboxBuilder.build();
-        console.log('if you not see this in console, you are fucked');
     }
     //Callback function
     onCode(code) {
-        console.log(code);
+        //console.log(code)
         this.generatedCode = code;
     }
     getGeneratedCode() {
@@ -390,39 +389,63 @@ class BlocklyworkspaceComponent {
     ngAfterViewInit() {
         //Initialize workspace with block + create variable on code
         this.blocklyComponent.fromXml(this.jsonContent['xml-workspace']);
-        //Add predefined varialbe
-        for (var i = 0; i < this.jsonContent['vars'].length; ++i) {
-            this.blocklyComponent.workspace.createVariable(this.jsonContent['vars'][i]);
+        //Add predefined external varialbe
+        for (var i = 0; i < this.jsonContent['vars-ext'].length; ++i) {
+            this.blocklyComponent.workspace.createVariable(this.jsonContent['vars-ext'][i]);
         }
     }
+    replaceAllOccuren(qstr, tstr, out) {
+        var re = new RegExp(qstr, 'gi');
+        return out.replace(re, tstr);
+    }
     generateWorkspace() {
-        //Push newly create variable to jsonContent
-        this.jsonContent['vars'] = []; //remove everythings
-        let varList = this.blocklyComponent.workspace.getAllVariables();
-        for (var i = 0; i < varList.length; ++i) {
-            console.log();
-            this.jsonContent['vars'].push(varList[i].name);
-        }
-        //repace xml workspace
-        let xmlworkspace = this.blocklyComponent.toXml();
-        xmlworkspace.replace('"', '\\"');
-        this.jsonContent['xml-workspace'] = xmlworkspace;
-        //add javascript code
+        let outputJson = this.jsonContent;
+        //1 pack xml workspace file
+        outputJson['xml-workspace'] = this.blocklyComponent.toXml().replace(/\"/g, "\\\"");
+        //2 pack variable to internal (vars-int : created on blockly) and external (vars-ext : create by external workspace)
+        let allWorkspaceVariable = this.blocklyComponent.workspace.getAllVariables();
+        allWorkspaceVariable.forEach(element => {
+            (outputJson['vars-ext'].indexOf(element.name) === -1 && outputJson['vars-int'].indexOf(element.name) === -1) ? (outputJson['vars-int'].push(element.name)) : (null);
+        });
+        //3 remove all variable declaration from generated code and add only internal variable declaration
         let codeworkspace = this.generatedCode;
-        codeworkspace.replace('"', '\\"');
-        this.jsonContent['code-workspace'] = codeworkspace;
-        //TEST: Hardcode - by pass method ref eg. b.a => b_a by blockly
+        codeworkspace = codeworkspace.substring(codeworkspace.indexOf('\n\n'), codeworkspace.length - 1);
+        let intVarDeclareStr = new String();
+        for (var i in outputJson['vars-int']) {
+            intVarDeclareStr += 'var ' + outputJson['vars-int'][i] + '\n';
+        }
+        //console.log(intVarDeclareStr + codeworkspace)
+        //4. replace external variable object reference converted by blockly
+        allWorkspaceVariable.forEach(element => {
+            (outputJson['vars-ext'].indexOf(element.name) !== -1) ? (codeworkspace = this.replaceAllOccuren(element.name, element.name, codeworkspace)) : (null);
+        });
+        // console.log(intVarDeclareStr+codeworkspace);
+        outputJson['code-workspace'] = intVarDeclareStr + codeworkspace;
+        // let varList:any = this.blocklyComponent.workspace.getAllVariables();
+        // for(var i = 0; i < varList.length; ++i) {
+        //   this.jsonContent['vars'].push(varList[i].name);
+        // }
+        // this.jsonContent['xml-workspace'] = this.blocklyComponent.toXml(); 
+        // let codeworkspace: string = this.generatedCode;
+        // //fix object reference tranform of blockly : eg. b.a -> b_a using regrex
+        // for(var i = 0; i < varList.length; ++i) {
+        //   var re = new RegExp(varList[i].name.replace(/\./g, '_'), 'gi')
+        //   codeworkspace = codeworkspace.replace(re, varList[i].name);
+        // }
+        // console.log(`${codeworkspace}`)
+        // this.jsonContent['code-workspace'] = codeworkspace;
+        // //TEST: Hardcode - by pass method ref eg. b.a => b_a by blockly
         //replace varaible name
+        intVarDeclareStr = undefined;
         this.exportJsonFile();
     }
     exportJsonFile() {
         try {
             let exportJson = JSON.stringify(this.jsonContent);
-            console.log(exportJson);
+            // console.log(exportJson);
             let blob = new Blob([exportJson], { type: 'text/json' });
             let url = window.webkitURL.createObjectURL(blob);
             let uri = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-            // var uri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8, " + encodeURIComponent(exportJson));
             this.downloadJsonHref = uri;
         }
         catch (e) {
