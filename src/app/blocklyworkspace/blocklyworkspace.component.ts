@@ -91,7 +91,10 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     //Initialize workspace with block + create variable on code
     this.blocklyComponent.fromXml(this.jsonContent['xml-workspace']);
     //Add predefined external varialbe
-    for (var i = 0; i < this.jsonContent['vars-ext'].length; ++i) {
+    // for (var i = 0; i < this.jsonContent['vars-ext'].length; ++i) {
+    //   this.blocklyComponent.workspace.createVariable(this.jsonContent['vars-ext'][i]);
+    // }
+    for (var i  of this.jsonContent['vars-ext']) {
       this.blocklyComponent.workspace.createVariable(this.jsonContent['vars-ext'][i]);
     }
   }
@@ -127,31 +130,8 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     });
     // console.log(intVarDeclareStr+codeworkspace);
     outputJson['code-workspace'] = intVarDeclareStr + codeworkspace;
-    
 
-
-
-    // let varList:any = this.blocklyComponent.workspace.getAllVariables();
-    // for(var i = 0; i < varList.length; ++i) {
-    //   this.jsonContent['vars'].push(varList[i].name);
-    // }
-    // this.jsonContent['xml-workspace'] = this.blocklyComponent.toXml(); 
-
-
-    // let codeworkspace: string = this.generatedCode;
-
-    
-    // //fix object reference tranform of blockly : eg. b.a -> b_a using regrex
-    // for(var i = 0; i < varList.length; ++i) {
-    //   var re = new RegExp(varList[i].name.replace(/\./g, '_'), 'gi')
-    //   codeworkspace = codeworkspace.replace(re, varList[i].name);
-    // }
-
-    // console.log(`${codeworkspace}`)
-    // this.jsonContent['code-workspace'] = codeworkspace;
-
-    // //TEST: Hardcode - by pass method ref eg. b.a => b_a by blockly
-    //replace varaible name
+    //RESET and export
     intVarDeclareStr = undefined;
     this.exportJsonFile();
   }
