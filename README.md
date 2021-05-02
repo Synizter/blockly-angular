@@ -8,8 +8,7 @@ If there's no error, webapp will be access on localhost:4200
 - [x] remove variable declaration from generated code
 - [x] workaround . and _ tranform by blockly (regrex)
 - [x] arrange variable type to external (vars-ext) and internal variable (vars-int). vars-int specify variable which will be used only in blockly workspace.
-- [ ] remove declaration of variable of vars-ext from output code
+- [x] remove declaration of variable of vars-ext from output code
 
 ## Limitation
-- DO NOT use _ in varaible, use camel case instead
-- 
+-  PREFERRED NOT TO use _ in varaible, use camel case instead
