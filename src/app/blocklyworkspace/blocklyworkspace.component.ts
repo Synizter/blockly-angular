@@ -109,8 +109,9 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     
     //2 pack variable to internal (vars-int : created on blockly) and external (vars-ext : create by external workspace)
     let allWorkspaceVariable:any = this.blocklyComponent.workspace.getAllVariables();
+    //console.log(outputJson['vars-ext'].some(ele => ele === "obj.name"))
     allWorkspaceVariable.forEach(element => {
-      (outputJson['vars-ext'].indexOf(element.name) === -1 && outputJson['vars-int'].indexOf(element.name) === -1) ? (outputJson['vars-int'].push(element.name)): (null);
+      (outputJson['vars-ext'].some(ele => ele === element.name) === -1 && outputJson['vars-int'].indexOf(element.name) === -1) ? (outputJson['vars-int'].push(element.name)): (null);
     });
     
     //3 remove all variable declaration from generated code and add only internal variable declaration
