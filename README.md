@@ -3,3 +3,6 @@
 Install dependencies using `npm install`
 run webapp locally using `npm start` or `ng server`
 If there's no error, webapp will be access on localhost:4200
+
+TODO
+[ ] Add default var-ext key in case program start with blockyl
