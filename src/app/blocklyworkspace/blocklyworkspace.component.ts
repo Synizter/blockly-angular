@@ -46,6 +46,7 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     new SkillGoToBlock('temi_skill_goto',null, null),
     new SkillSpeakBlock('temi_skill_speak',null, null)
   ];
+
   private generatedCode:string;
   public downloadJsonHref: SafeUrl;
   public config: NgxBlocklyConfig = {
@@ -88,13 +89,19 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     
   }
   ngAfterViewInit(): void {
-    //Initialize workspace with block + create variable on code
-    this.blocklyComponent.fromXml(this.jsonContent['xml-workspace']);
-    //Add predefined external varialbe
-    for (var i = 0; i < this.jsonContent['vars-ext'].length; ++i) {
-      this.blocklyComponent.workspace.createVariable(this.jsonContent['vars-ext'][i]);
+    //Initialize workspace with block (+ create variable on code
+    if(this.jsonContent.hasOwnProperty('xml-workspace')) {
+      this.blocklyComponent.fromXml(this.jsonContent['xml-workspace']);
     }
-
+    else {//if no workspace xml provided, initialize with empty workspace
+      this.blocklyComponent.fromXml("<xml xmlns=\"https://developers.google.com/blockly/xml\"></xml>");
+    }
+    //Add predefined external varialbe if key vars-ext exist
+    if(this.jsonContent.hasOwnProperty('vars-ext')) {
+      for (var i = 0; i < this.jsonContent['vars-ext'].length; ++i) {
+        this.blocklyComponent.workspace.createVariable(this.jsonContent['vars-ext'][i]);
+      }
+    }
   }
 
   private replaceAllOccuren(qstr:string, tstr:string, out:string) {
@@ -108,7 +115,7 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     outputJson['xml-workspace'] = this.blocklyComponent.toXml()
     
     //2 pack variable to internal (vars-int : created on blockly) and external (vars-ext : create by external workspace)
-    let allWorkspaceVariable:any = this.blocklyComponent.workspace.getAllVariables();
+    let allWorkspaceVariable:any[] = this.blocklyComponent.workspace.getAllVariables();
     //console.log(outputJson['vars-ext'].some(ele => ele === "obj.name"))
     allWorkspaceVariable.forEach(element => {
       (outputJson['vars-ext'].some(ele => ele === element.name) === -1 && outputJson['vars-int'].indexOf(element.name) === -1) ? (outputJson['vars-int'].push(element.name)): (null);
