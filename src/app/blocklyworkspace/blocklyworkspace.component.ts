@@ -102,6 +102,12 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
         this.blocklyComponent.workspace.createVariable(this.jsonContent['vars-ext'][i]);
       }
     }
+    //Add predefined internal varialbe if key vars-ext exist
+    if(this.jsonContent.hasOwnProperty('vars-int')) {
+      for (var i = 0; i < this.jsonContent['vars-int'].length; ++i) {
+        this.blocklyComponent.workspace.createVariable(this.jsonContent['vars-int'][i]);
+      }
+    }
   }
 
   private replaceAllOccuren(qstr:string, tstr:string, out:string) {
@@ -111,15 +117,24 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
 
   public generateWorkspace() {
     let outputJson:JSON = this.jsonContent;
+
+    if(!outputJson.hasOwnProperty('vars-ext')) {
+      console.log('here')
+      outputJson['vars-ext'] = new Array<any>();
+    }
+
+    if(!outputJson.hasOwnProperty('vars-int')) {
+      outputJson['vars-int'] = new Array<any>();
+    }
+
     //1 pack xml workspace file
     outputJson['xml-workspace'] = this.blocklyComponent.toXml()
     
     //2 pack variable to internal (vars-int : created on blockly) and external (vars-ext : create by external workspace)
     let allWorkspaceVariable:any[] = this.blocklyComponent.workspace.getAllVariables();
-    //console.log(outputJson['vars-ext'].some(ele => ele === "obj.name"))
     allWorkspaceVariable.forEach(element => {
-      (outputJson['vars-ext'].some(ele => ele === element.name) === -1 && outputJson['vars-int'].indexOf(element.name) === -1) ? (outputJson['vars-int'].push(element.name)): (null);
-    });
+        (outputJson['vars-ext'].some(ele => ele === element.name) === -1 && outputJson['vars-int'].indexOf(element.name) === -1) ? (outputJson['vars-int'].push(element.name)): (null);
+      }); 
     
     //3 remove all variable declaration from generated code and add only internal variable declaration
     let codeworkspace: string = this.generatedCode;
@@ -137,6 +152,7 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     // console.log(intVarDeclareStr+codeworkspace);
     outputJson['code-workspace'] = intVarDeclareStr + codeworkspace;
 
+    console.log(outputJson)
     //RESET and export
     intVarDeclareStr = undefined;
     this.exportJsonFile();
