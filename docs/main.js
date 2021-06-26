@@ -75,7 +75,9 @@ class AppComponent {
             this.content = JSON.parse(code);
         }
         catch (e) {
-            alert('Invalid json format!');
+            //alert('Invalid json format!');
+            console.log(e)
+            console.log('invalid json format')
             this.displayWorkspace = false;
         }
     }

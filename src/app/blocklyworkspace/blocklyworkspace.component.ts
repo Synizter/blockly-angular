@@ -133,8 +133,11 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     let allWorkspaceVariable:any[] = this.blocklyComponent.workspace.getAllVariables();
     allWorkspaceVariable.forEach(element => {
         // (outputJson['vars-ext'].some(ele => ele === element.name) === -1 && outputJson['vars-int'].indexOf(element.name) === -1) ? (outputJson['vars-int'].push(element.name)): (null);
-        outputJson['vars-ext'].some(ele => ele === element.name)?  null: (outputJson['vars-int'].push(element.name)) 
+        outputJson['vars-ext'].some(ele => ele === element.name) ?  null: (outputJson['vars-int'].push(element.name)) 
       }); 
+    //remove duplicate using set
+    let varsIntSet = new Set(outputJson['vars-int'])
+    outputJson['vars-int'] = Array.from(varsIntSet)
     
     //3 remove all variable declaration from generated code and add only internal variable declaration
     let codeworkspace: string = this.generatedCode;
@@ -167,7 +170,8 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
       let uri: SafeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
       this.downloadJsonHref = uri;
     }catch(e){
-      alert(e);
+      //alert(e);
+      console.log(e)
     }
 
   }
