@@ -438,7 +438,8 @@ class BlocklyworkspaceComponent {
             this.downloadJsonHref = uri;
         }
         catch (e) {
-            alert(e);
+            //alert(e);
+            console.log(e)
         }
     }
 }

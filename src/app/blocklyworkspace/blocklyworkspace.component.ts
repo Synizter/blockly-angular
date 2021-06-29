@@ -136,7 +136,6 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     
     //3 remove all variable declaration from generated code and add only internal variable declaration
     let codeworkspace: string = this.generatedCode;
-    console.log(codeworkspace)
     codeworkspace = codeworkspace.substring(codeworkspace.indexOf('\n\n') ,codeworkspace.length - 1)
     let intVarDeclareStr = new String()
     for(var i in outputJson['vars-int']) {
@@ -148,6 +147,8 @@ export class BlocklyworkspaceComponent implements AfterViewInit {
     allWorkspaceVariable.forEach(element => {
       (outputJson['vars-ext'].indexOf(element.name) !== -1) ? (codeworkspace = this.replaceAllOccuren(element.name, element.name, codeworkspace)) : (null);
     });
+    //5. change window.alert to console.log
+    codeworkspace = this.replaceAllOccuren("window.alert", "console.log", codeworkspace)
     outputJson['code-workspace'] = intVarDeclareStr + codeworkspace;
 
     console.log(outputJson)
