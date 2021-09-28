@@ -1,4 +1,4 @@
-# Blockly for Temi in Angular
+# Blockly for Temi in Angular (AIS x Virach Labo)
 ## How to use
 - `git clone https://github.com/Synizter/blockly-angular`
 - `cd blockly-angular`
